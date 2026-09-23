@@ -10,7 +10,11 @@ Aucune ligne de code, aucun manifest, aucune configuration de test n'existe à c
 
 ### PO-1 — Choix du stack technique
 
-Ni l'intention, ni la spec, ni le dépôt n'imposent un langage ou un framework de test. Question posée à l'auteur de ce plan le 23/09/2026 ; réponse : à trancher plus tard. Ce point doit être tranché avec le Product Owner avant l'étape 1 de code (voir « Ordre de travail »).
+Ni l'intention, ni la spec, ni le dépôt n'imposent un langage ou un framework de test.
+Décision : Python 3, tests avec pytest.
+Auteur : François Laurain (Product Owner).
+Date : 2026-09-23.
+Statut : tranchée.
 
 ### PO-2 — Caractère de commande invalide
 
@@ -32,21 +36,21 @@ La réserve R6 (tranchée) fixe le **contenu** du message d'erreur (texte donnan
 | EX-06 | Affichage de la position/orientation finales | Résultat final |
 | EX-07 | Comparaison périodique avec le vrai rover, alerte sur écart | Comparateur avec le vrai rover |
 
-## Architecture proposée (modules logiques, indépendants du stack)
+## Architecture proposée (modules logiques)
 
-1. **Rover / état** — position (x, y) + orientation (N/E/S/W) ; rotation gauche/droite sans changement de position. → EX-02.
-2. **Carte / grille** — grille rectangulaire de dimensions fixes ; interprétation des symboles (🌳/🪨 = obstacle, 🟩/🟫 = libre, réserve R2) ; toute case hors de la grille fournie est considérée libre par défaut (réserve R4). → EX-05, R2, R3, R4.
-3. **Interpréteur de commandes** — traduit la chaîne de commandes en liste ordonnée d'actions F (avancer), R (droite), L (gauche) (réserve R5). → EX-01, R5.
-4. **Moteur d'exécution** — applique les commandes séquentiellement sur l'état du rover ; interroge la carte avant chaque avancée ; ne déplace jamais le rover sur un obstacle (réserve R1) ; arrête l'exécution au premier obstacle rencontré, sans exécuter les commandes restantes (réserve R7). → EX-01, EX-03, EX-04, EX-06, R1, R4, R7.
-5. **Erreur de blocage** — construit le message texte donnant la position et l'orientation au moment du blocage (réserve R6). → EX-04, R6.
-6. **Résultat final** — position et orientation finales : celles du blocage en cas d'arrêt prématuré (réserve R7), sinon celles obtenues après la dernière commande exécutée. → EX-06, R7.
-7. **Comparateur avec le vrai rover** — déclenché après chaque commande exécutée par le simulateur ; reçoit la position du vrai rover via un point d'extension (interface/port) et déclenche une alerte visible pour le développeur en cas d'écart. La source réelle de cette position reste hors périmètre (réserve R8) : seule une implémentation factice (fake) sera fournie pour les tests ; l'intégration réelle sera traitée dans une intention/spec séparée. → EX-07, R8.
+1. **Rover / état** (`mars_rover/rover.py`) — position (x, y) + orientation (N/E/S/W) ; rotation gauche/droite sans changement de position. → EX-02.
+2. **Carte / grille** (`mars_rover/grid.py`) — grille rectangulaire de dimensions fixes ; interprétation des symboles (🌳/🪨 = obstacle, 🟩/🟫 = libre, réserve R2) ; toute case hors de la grille fournie est considérée libre par défaut (réserve R4). → EX-05, R2, R3, R4.
+3. **Interpréteur de commandes** (`mars_rover/commands.py`) — traduit la chaîne de commandes en liste ordonnée d'actions F (avancer), R (droite), L (gauche) (réserve R5). → EX-01, R5.
+4. **Moteur d'exécution** (`mars_rover/engine.py`) — applique les commandes séquentiellement sur l'état du rover ; interroge la carte avant chaque avancée ; ne déplace jamais le rover sur un obstacle (réserve R1) ; arrête l'exécution au premier obstacle rencontré, sans exécuter les commandes restantes (réserve R7). → EX-01, EX-03, EX-04, EX-06, R1, R4, R7.
+5. **Erreur de blocage** (`mars_rover/errors.py`) — construit le message texte donnant la position et l'orientation au moment du blocage (réserve R6). → EX-04, R6.
+6. **Résultat final** (`mars_rover/result.py`) — position et orientation finales : celles du blocage en cas d'arrêt prématuré (réserve R7), sinon celles obtenues après la dernière commande exécutée. → EX-06, R7.
+7. **Comparateur avec le vrai rover** (`mars_rover/comparator.py`) — déclenché après chaque commande exécutée par le simulateur ; reçoit la position du vrai rover via un point d'extension (interface/port, `RealRoverPositionProvider`) et déclenche une alerte visible pour le développeur en cas d'écart. La source réelle de cette position reste hors périmètre (réserve R8) : seule une implémentation factice (fake) sera fournie pour les tests ; l'intégration réelle sera traitée dans une intention/spec séparée. → EX-07, R8.
 
 ## Ordre de travail
 
 Approche TDD, du module le plus isolé au plus intégré. Chaque étape associe code et tests, et fait l'objet d'un commit dédié une fois validée.
 
-1. Squelette du projet (manifest, configuration des tests), une fois PO-1 tranché — commit séparé du code métier.
+1. Squelette du projet (`pyproject.toml`, dépendance de dev `pytest`, arborescence `mars_rover/` et `tests/` vides) — commit séparé du code métier.
 2. Rover / état + rotation (module 1), avec tests unitaires (EX-02).
 3. Carte / grille + interprétation des symboles + règle « hors grille = libre » (module 2), avec tests (EX-05, R2, R3, R4).
 4. Interpréteur de commandes (module 3), avec tests (EX-01, R5) ; PO-2 à trancher avant cette étape.
@@ -64,7 +68,30 @@ Approche TDD, du module le plus isolé au plus intégré. Chaque étape associe 
 
 ## Fichiers de code
 
-Non encore déterminés : dépendent du stack tranché en PO-1. Ce plan sera complété (ou un plan.md révisé sera proposé) avec l'arborescence de fichiers exacte une fois ce point tranché avec le Product Owner.
+Stack : Python 3, tests avec pytest (PO-1 tranchée).
+
+```
+pyproject.toml
+mars_rover/
+    __init__.py
+    rover.py         # module 1 — état + rotation (EX-02)
+    grid.py           # module 2 — carte / grille (EX-05, R2, R3, R4)
+    commands.py        # module 3 — interpréteur de commandes (EX-01, R5)
+    engine.py           # module 4 — moteur d'exécution (EX-01, EX-03, EX-04, EX-06, R1, R4, R7)
+    errors.py            # module 5 — erreur de blocage (EX-04, R6)
+    result.py             # module 6 — résultat final (EX-06, R7)
+    comparator.py          # module 7 — comparateur avec le vrai rover (EX-07, R8)
+tests/
+    test_rover.py
+    test_grid.py
+    test_commands.py
+    test_engine.py
+    test_result.py
+    test_comparator.py
+    test_acceptance.py   # scénarios EX-01 à EX-06 de spec.md
+```
+
+Chaque fichier `mars_rover/*.py` est créé à l'étape correspondante de l'« Ordre de travail », accompagné de son fichier de test au même moment (pas de fichier de code sans test associé dans le même commit).
 
 ## Contexte de génération
 
@@ -83,4 +110,6 @@ Aucune skill `build` n'existe dans ce dépôt à ce jour (voir CLAUDE.md) ; ce p
 
 ### Révisions
 
-Aucune révision pour l'instant.
+| Date | Changement |
+| --- | --- |
+| 2026-09-23 | PO-1 tranchée (Python 3 + pytest) ; ajout de l'arborescence de fichiers de code correspondante. |
