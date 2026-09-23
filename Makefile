@@ -1,13 +1,22 @@
 PYTHON := $(shell [ -x .venv/bin/python ] && echo .venv/bin/python || echo python3)
 DEPLOY_DIR := .deploy
 
-.PHONY: test run deploy rollback
+.PHONY: test run fix-start fix-end deploy rollback
 
 test:
 	$(PYTHON) -m pytest
 
 run:
 	$(PYTHON) -m examples.run_demo
+
+fix-start:
+	@mkdir -p .claude
+	@touch .claude/fix-mode
+	@echo "Mode correction activé : les fichiers de tests sont protégés."
+
+fix-end:
+	@rm -f .claude/fix-mode
+	@echo "Mode correction désactivé."
 
 deploy:
 	@if [ -z "$(ENV)" ]; then echo "ENV requis, ex: make deploy ENV=staging" >&2; exit 1; fi
