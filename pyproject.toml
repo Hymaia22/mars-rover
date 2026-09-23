@@ -1,0 +1,18 @@
+[project]
+name = "mars-rover-simulateur"
+version = "0.1.0"
+description = "Simulateur de déplacement Mars Rover (kata)"
+requires-python = ">=3.10"
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["mars_rover*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
