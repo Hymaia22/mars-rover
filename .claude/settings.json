@@ -9,6 +9,15 @@
             "command": "python3 .claude/hooks/test_guard.py"
           }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/production_gate.py"
+          }
+        ]
       }
     ]
   }
