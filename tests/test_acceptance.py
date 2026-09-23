@@ -34,6 +34,18 @@ def test_ex03_forward_moves_one_cell_in_current_direction():
     assert result.position == Position(2, 3)
 
 
+def test_ex04_forward_blocked_by_obstacle_keeps_rover_immobile_and_returns_error():
+    rover = Rover(Position(0, -1), Direction.N)
+    grid = Grid([["🌳"]])
+
+    result = simulate(rover, grid, "F")
+
+    assert result.position == Position(0, -1)
+    assert result.direction is Direction.N
+    assert result.blocked is True
+    assert result.error_message == "Obstacle détecté en (0, -1), orientation N"
+
+
 def test_ex05_map_symbols_are_interpreted_as_free_or_obstacle():
     grid = Grid([["🌳", "🪨", "🟩", "🟫"]])
 
