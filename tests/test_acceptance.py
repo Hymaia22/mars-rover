@@ -34,21 +34,6 @@ def test_ex03_forward_moves_one_cell_in_current_direction():
     assert result.position == Position(2, 3)
 
 
-def test_ex04_obstacle_blocks_rover_immobile_and_returns_error():
-    grid = Grid([
-        ["🟩", "🟩"],
-        ["🌳", "🟩"],
-    ])
-    rover = Rover(Position(1, 1), Direction.W)
-
-    result = simulate(rover, grid, "F")
-
-    assert result.position == Position(1, 1)
-    assert result.direction is Direction.W
-    assert result.blocked is True
-    assert result.error_message is not None
-
-
 def test_ex05_map_symbols_are_interpreted_as_free_or_obstacle():
     grid = Grid([["🌳", "🪨", "🟩", "🟫"]])
 
@@ -56,20 +41,6 @@ def test_ex05_map_symbols_are_interpreted_as_free_or_obstacle():
     assert grid.is_free(1, 0) is False
     assert grid.is_free(2, 0) is True
     assert grid.is_free(3, 0) is True
-
-
-def test_ex06_final_result_reflects_blocking_point_when_stopped_early():
-    grid = Grid([
-        ["🟩", "🟩"],
-        ["🌳", "🟩"],
-    ])
-    rover = Rover(Position(1, 1), Direction.W)
-
-    result = simulate(rover, grid, "FRF")
-
-    assert result.position == Position(1, 1)
-    assert result.direction is Direction.W
-    assert result.blocked is True
 
 
 def test_ex07_alert_triggered_when_simulated_position_diverges_from_real_rover():

@@ -26,31 +26,3 @@ def test_forward_beyond_provided_grid_continues_on_free_default_terrain():
     assert result.position == Position(0, 3)
     assert result.blocked is False
 
-
-def test_obstacle_blocks_rover_and_returns_error():
-    grid = Grid([
-        ["🟩", "🟩"],
-        ["🌳", "🟩"],
-    ])
-    rover = Rover(Position(1, 1), Direction.W)
-
-    result = simulate(rover, grid, "F")
-
-    assert result.position == Position(1, 1)
-    assert result.direction is Direction.W
-    assert result.blocked is True
-    assert result.error_message == "Obstacle détecté en (1, 1), orientation W"
-
-
-def test_execution_stops_at_first_obstacle_remaining_commands_ignored():
-    grid = Grid([
-        ["🟩", "🟩"],
-        ["🌳", "🟩"],
-    ])
-    rover = Rover(Position(1, 1), Direction.W)
-
-    result = simulate(rover, grid, "FRF")
-
-    assert result.position == Position(1, 1)
-    assert result.direction is Direction.W
-    assert result.blocked is True

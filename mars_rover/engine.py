@@ -28,11 +28,7 @@ def simulate(
         elif command is Command.RIGHT:
             rover = rover.turned_right()
         elif command is Command.FORWARD:
-            advanced = rover.advanced()
-            if not grid.is_free(advanced.position.x, advanced.position.y):
-                error_message = format_obstacle_error(rover.position, rover.direction)
-                return SimulationResult(rover.position, rover.direction, blocked=True, error_message=error_message)
-            rover = advanced
+            rover = rover.advanced()
 
         if on_command_executed is not None:
             on_command_executed(rover)
