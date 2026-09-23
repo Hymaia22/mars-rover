@@ -1,0 +1,9 @@
+metric: ci_test_failure_rate
+baseline: rolling_30_runs
+rules: mean_stddev
+tiers:
+  1sigma: { action: log }
+  2sigma: { action: diagnose,
+            tools: "Read,Grep,Bash(make test)" }
+  3sigma: { action: propose,
+            routes: [pull_request] }
