@@ -40,3 +40,36 @@ Common rules across these skills, worth preserving if you write or edit one:
 Lorsqu’une même erreur se répète deux fois, propose une instruction courte et précise pour l’éviter. Appuie-toi sur les erreurs observées et fais valider cette instruction avant de l’ajouter à CLAUDE.md.
 
 Si une instruction devient obsolète, propose sa correction ou son retrait et attends la validation avant de modifier le fichier.
+
+## Vérifier ton travail
+
+- `make test` lance les tests du simulateur.
+```
+.venv/bin/python -m pytest
+============================= test session starts ==============================
+platform darwin -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: /Users/francois/Documents/Documents - MacBook Air de Francois - 1/Hymaia/Fresques/.claude/skills/fresque-cartes-visuelles/scripts/Dojo-thiga
+configfile: pyproject.toml
+testpaths: tests
+collected 25 items
+
+tests/test_acceptance.py .......                                         [ 28%]
+tests/test_commands.py ...                                               [ 40%]
+tests/test_comparator.py ..                                              [ 48%]
+tests/test_engine.py ....                                                [ 64%]
+tests/test_grid.py ...                                                   [ 76%]
+tests/test_result.py ..                                                  [ 84%]
+tests/test_rover.py ....                                                 [100%]
+
+============================== 25 passed in 0.01s ==============================
+```
+- `make run` rejoue le scénario de démonstration.
+```
+.venv/bin/python -m examples.run_demo
+Position finale : (2, 3)
+Orientation finale : N
+```
+
+Lance ces deux commandes avant de dire qu'une tâche est finie, et donne leur
+sortie dans ton compte rendu. Ne corrige jamais un test pour le faire passer,
+n'en supprime aucun et n'en ignore aucun.
