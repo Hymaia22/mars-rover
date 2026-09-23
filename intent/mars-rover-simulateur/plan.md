@@ -18,11 +18,19 @@ Statut : tranchée.
 
 ### PO-2 — Caractère de commande invalide
 
-La spec (EX-01, réserve R5 tranchée) définit F, R, L comme les seuls caractères valides, mais ne précise pas le comportement du simulateur si un autre caractère apparaît dans la liste de commandes. Non tranché : à poser au Product Owner avant d'implémenter l'interpréteur de commandes (module 3).
+La spec (EX-01, réserve R5 tranchée) définit F, R, L comme les seuls caractères valides, mais ne précise pas le comportement du simulateur si un autre caractère apparaît dans la liste de commandes.
+Décision : le caractère invalide est ignoré ; l'exécution continue avec les commandes suivantes.
+Auteur : François Laurain (Product Owner).
+Date : 2026-09-23.
+Statut : tranchée.
 
 ### PO-3 — Mécanisme du message d'erreur de blocage
 
-La réserve R6 (tranchée) fixe le **contenu** du message d'erreur (texte donnant position et orientation au blocage) mais pas le **mécanisme** de restitution (valeur de retour structurée, exception, sortie standard...). Non tranché : à poser au Product Owner avant d'implémenter le module « Erreur de blocage » (module 5), ou à défaut à documenter comme décision technique d'implémentation sans incidence produit.
+La réserve R6 (tranchée) fixe le **contenu** du message d'erreur (texte donnant position et orientation au blocage) mais pas le **mécanisme** de restitution (valeur de retour structurée, exception, sortie standard...).
+Décision : le moteur d'exécution retourne toujours un résultat structuré (succès ou blocage avec message), jamais d'exception.
+Auteur : François Laurain (Product Owner).
+Date : 2026-09-23.
+Statut : tranchée.
 
 ## Correspondance exigence → module
 
@@ -113,3 +121,4 @@ Aucune skill `build` n'existe dans ce dépôt à ce jour (voir CLAUDE.md) ; ce p
 | Date | Changement |
 | --- | --- |
 | 2026-09-23 | PO-1 tranchée (Python 3 + pytest) ; ajout de l'arborescence de fichiers de code correspondante. |
+| 2026-09-23 | PO-2 tranchée (caractère invalide ignoré) et PO-3 tranchée (résultat structuré, pas d'exception) ; implémentation démarrée. |
